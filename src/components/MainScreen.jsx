@@ -6,6 +6,10 @@ function MainScreen(props) {
       <div className="main-container">
         <h1>Quizzical</h1>
         <p>Answer to the questions as fast as possible to be on the toplist</p>
+        <div className="nickname">
+          {/* <label htmlFor="name"> Nickname:</label> */}
+          <input required type="text" name="name" onChange={props.handleChange} value={props.playerName} placeholder="Your nickname" ></input>
+        </div>
         <button onClick={props.startGame}>Start game</button>
       </div>
     </>
