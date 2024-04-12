@@ -1,26 +1,53 @@
 
 body {
-    box-sizing: border-box ;
+    box-sizing: content-box ;
     padding: 0;
     margin: 0 auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #FFFFEC;
+    font-family: monospace;
+    background: #FFEFBA;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #FFFFFF, #FFEFBA);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    height: 100vh;
+
   }
 
   /* MAIN PAGE */
 
-  .main-container {
+  h1 {
+    font-size: 3em
+  }
 
+  .main-container {
+    font-size: 1.5em;
     margin: auto 0 ;
     width: 100%;
-    height: 100vh;
+
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     padding: auto 1;
     /* text-align: center; */
-    background-color: #FFFFEC;
+    /* background-color: #FFFFEC; */
+  }
+
+  .nickname {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+  }
+
+  .nickname input {
+    text-align: center;
+    height: 1.5em;
+    font-size: 1.5em;
+    /* border: none; */
+    background-color: #5ccff900;
+    margin-bottom: 3em;
+    border: #b1a8a8 solid 1px;
+    /* border-radius: 5px; */
+
   }
 
 
@@ -28,6 +55,7 @@ body {
 /* This is inherited by the results component too. */
 
 .question-page-container {
+  font-size: 1.25em;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -35,6 +63,7 @@ body {
   margin: auto auto;
   height: 100%;
   margin: 0 1em;
+
 }
 
 
@@ -49,15 +78,19 @@ body {
   border-width: 0.1em;
   width: 100%;
   padding: 0 2em;
+  cursor:default
+}
 
+.question:hover {
+  background: whitesmoke;
 }
 
 .question.correct-answer {
-  background-color: #1ad81337;
+  background-color: #09ff0033;
 }
 
 .question.wrong-answer {
-  background-color: #b8131327;
+  background-color: #b0000034;
 }
 
 
@@ -72,14 +105,14 @@ body {
 .answer label, .results, .marked, .correct {
   display: inline-block;
   padding: 0.5em 1em;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   cursor: pointer;
   margin: 1em;
-  border-radius: 20px ;
+  /* border-radius: 20px ; */
   min-width: 75px;
   text-align: center;
   border: gray 1px solid;
-
+  font-weight: 600;
 }
 
 /* Hide the radio button */
@@ -88,11 +121,15 @@ body {
 }
 
 .answer label{
-  background-color: #faeaba;
+  background-color: #BED1CF;
+  border: #b1a8a8 solid 1px;
+  box-shadow: 0.5px 1px 0.5px #b1a8a8;
 }
 
 .answer input:checked + label {
-  background-color: rgb(86, 200, 221);
+  background-color: #FFE4C9;
+  border: #000 solid 1px;
+  box-shadow: inset 1px 0.5px 1px #000;
 }
 
 
@@ -100,18 +137,22 @@ body {
 .results {
   background-color: #FFF9B6;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.3;
+  box-shadow:  0.5px 1px 0.5px #000;
 }
 
 .marked {
-  background-color: #FF9292;
+  background-color: #FA7070;
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.3;
+  box-shadow:  0.5px 1px 0.5px #000;
 }
 
 .correct {
-  background-color: #9BCF53;
+  background-color: #9ADE7B;
   pointer-events: none;
+  font-weight: 700;
+  box-shadow: inset 1px 0.5px 1px #000;
 }
 
 
@@ -119,24 +160,28 @@ body {
 
 .button-container {
   display: flex;
-  margin: auto 0;
+  margin: 3em 0;
   justify-content: center;
   align-items: center;
+
 }
 
 button {
-  border-radius: 5px;
-
+  /* border-radius: 20px; */
   padding: 0.5em 0.75em;
   min-width: 25%;
-  background-color: #FDA769;
+  background-color: #E78895;
   cursor: pointer;
   font-size: 1.5em;
-
+  box-shadow: 1px 0.5px 1px #000;
 }
 
+
+
 button:active {
-  background-color: salmon;
+  background-color: FA7070;
+  box-shadow: inset 0.5px 1px 0.5px #000;
+
 }
 
 
@@ -145,6 +190,12 @@ button:active {
   font-size: 1.5em;
   font-weight: 700;
   padding-right: 1em;
+}
 
+
+@media screen and (max-height: 900px) {
+  body {
+    height: 100%;
+  }
 
 }

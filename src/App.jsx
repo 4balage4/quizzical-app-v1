@@ -11,27 +11,35 @@ import './App.css'
 function App() {
   // first intro screen
   const [firstRender, setFirstRender] = useState(true)
-
   const [questions, setQuestions] = useState([])
+  // if the state changes will update the array. This is only changed,  on the first render and when the user clicks on the new game.
+  // The questions are rendered when the page loads.
+  const [answer, setAnswer] = useState(true)
 
   // evaluate the answers
   const [change, setChange] = useState(false)
   const [sessionToken, setSessionToken] = useState('')
 
-  useEffect(() => {
+  // player name for the results.
+  const [playerName, setPlayerName] = useState('')
 
-    fetch("https://opentdb.com/api_token.php?command=request")
-    .then(response => response.json())
-    .then(data => setSessionToken(data.token))
-    console.log('fetching data...')
+  useEffect(() => {
+    if(!sessionToken) {
+      fetch("https://opentdb.com/api_token.php?command=request")
+      .then(response => response.json())
+      .then(data => setSessionToken(data.token))
+    }
+    console.log('fetching dat...')
     fetchData()
 
-  }, [firstRender])
+  }, [answer])
 
 
 
   const fetchData  = async () => {
+    // easy medium
     const difficulty = "medium"
+    setQuestions([])
 
     const info = await fetch(`https://opentdb.com/api.php?amount=5&category=22&difficulty=${difficulty}&type=multiple&token=${sessionToken}`)
       .then(response => response.json())
@@ -52,11 +60,15 @@ function App() {
               markedAnswer: "",
               correct: false
              }
-             setQuestions(prev => [...prev, questionSet])
+            return setQuestions(prev => [...prev, questionSet])
           })
        })
        return info
   }
+
+  // Create a timer for the user. When he clicks the start game and when he clicks the see results
+  // this will be saved as the result. The time, results, name.
+
 
   //  function fetchData() {
   //    fetch('https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple')
@@ -124,6 +136,7 @@ function App() {
         })
   }
 
+
   function changePage() {
     return setChange(prev =>!prev)
   }
@@ -132,7 +145,9 @@ function App() {
     if (!firstRender) {
       setQuestions([])
       setChange(false)
+      setAnswer(prev => !prev)
     }
+
     return setFirstRender(prev => !prev)
   }
 
@@ -145,7 +160,7 @@ function App() {
 
   const createdQuestions = questions.map(question => {
     return (
-      <Question data={question} key={nanoid()} handleChange={handleChange} />
+      <Question data={question} key={nanoid()} handleChange={handleChange}  />
      )
   })
 
@@ -164,9 +179,17 @@ function App() {
 
 
 
+  // PlayerName setter
+  function handlePlayerName(event) {
+    const name = event.target.value
+    setPlayerName(name)
+  }
+
+
+
   return (
     <>
-      {firstRender && <MainScreen startGame={startGame}/>}
+      {firstRender && <MainScreen startGame={startGame} playerName={playerName} handleChange={handlePlayerName}/>}
       {!firstRender &&
          <div className="question-page-container">
           {change ? getResults : createdQuestions}
@@ -178,5 +201,3 @@ function App() {
 }
 
 export default App
-
-{/* <MainScreen /> */}
