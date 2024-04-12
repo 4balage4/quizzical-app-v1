@@ -1,68 +1,150 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
 body {
-  margin: 0;
+    box-sizing: border-box ;
+    padding: 0;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #FFFFEC;
+  }
+
+  /* MAIN PAGE */
+
+  .main-container {
+
+    margin: auto 0 ;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: auto 1;
+    /* text-align: center; */
+    background-color: #FFFFEC;
+  }
+
+
+/* QUESTIONS */
+/* This is inherited by the results component too. */
+
+.question-page-container {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto auto;
+  height: 100%;
+  margin: 0 1em;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+
+
+.question {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  max-height: 80vh;
+  border-bottom: #67656570 solid;
+  border-width: 0.1em;
+  width: 100%;
+  padding: 0 2em;
+
+}
+
+.question.correct-answer {
+  background-color: #1ad81337;
+}
+
+.question.wrong-answer {
+  background-color: #b8131327;
+}
+
+
+.answers-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+.answer label, .results, .marked, .correct {
+  display: inline-block;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 1em;
+  border-radius: 20px ;
+  min-width: 75px;
+  text-align: center;
+  border: gray 1px solid;
+
+}
+
+/* Hide the radio button */
+.answer input {
+  display:none;
+}
+
+.answer label{
+  background-color: #faeaba;
+}
+
+.answer input:checked + label {
+  background-color: rgb(86, 200, 221);
+}
+
+
+/* RESULTS.JSX */
+.results {
+  background-color: #FFF9B6;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.marked {
+  background-color: #FF9292;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.correct {
+  background-color: #9BCF53;
+  pointer-events: none;
+}
+
+
+/* BUTTONS */
+
+.button-container {
+  display: flex;
+  margin: auto 0;
+  justify-content: center;
+  align-items: center;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  border-radius: 5px;
+
+  padding: 0.5em 0.75em;
+  min-width: 25%;
+  background-color: #FDA769;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  font-size: 1.5em;
+
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:active {
+  background-color: salmon;
+}
+
+
+.final-results {
+  margin-top: 1em 1em 1em;
+  font-size: 1.5em;
+  font-weight: 700;
+  padding-right: 1em;
+
+
 }
