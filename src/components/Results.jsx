@@ -1,43 +1,54 @@
 import { nanoid } from 'nanoid'
+import { motion } from "framer-motion";
+import {container} from './Motion'
 
 function Results(props) {
-  return (
-      <div className= {props.data.correct ? "question correct-answer" : "question wrong-answer"}>
-        <h3>{props.data.question}</h3>
-        <div className="answers-container" >
-          <>
-            {props.data.answers.map(answer => {
-              if (answer === props.data.correctAnswer)
-                {
-                  return (
-                    <div className="answer" key={answer}>
-                      <div className="correct">
-                        {answer}
-                      </div>
-                    </div>
-                  )
-                }
 
-              if (answer === props.data.markedAnswer) {
-                  return (
-                    <div className="answer" key={answer}>
-                      <div className="marked">
-                        {answer}
+
+  return (
+    <div className= {props.data.correct ? "question correct-answer" : "question wrong-answer"}>
+        <motion.div
+        className="container"
+        variants={container}
+        initial="hidden"
+        animate="visible"
+      >
+          <h3>{props.data.question}</h3>
+          <div className="answers-container" >
+            <>
+              {props.data.answers.map(answer => {
+                if (answer === props.data.correctAnswer)
+                  {
+                    return (
+                      <div className="answer" key={answer}>
+                        <div className="correct">
+                          {answer}
+                        </div>
                       </div>
+                    )
+                  }
+
+                if (answer === props.data.markedAnswer) {
+                    return (
+                      <div className="answer" key={answer}>
+                        <div className="marked">
+                          {answer}
+                        </div>
+                      </div>
+                    )
+                }
+                return (
+                  <div className="answer" key={answer}>
+                    <div className="results">
+                      {answer}
                     </div>
-                  )
-              }
-              return (
-                <div className="answer" key={answer}>
-                  <div className="results">
-                    {answer}
                   </div>
-                </div>
-              )
-            })
-            }
-          </>
-        </div>
+                )
+              })
+              }
+            </>
+          </div>
+        </motion.div>
       </div>
 
 
