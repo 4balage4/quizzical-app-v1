@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid'
 import { motion } from "framer-motion";
 import {container} from './Motion'
 
@@ -7,15 +6,15 @@ function Results(props) {
 
   return (
     <div className= {props.data.correct ? "question correct-answer" : "question wrong-answer"}>
-        <motion.div
-        className="container"
-        variants={container}
-        initial="hidden"
-        animate="visible"
-      >
+    <motion.div
+      className="container"
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
           <h3>{props.data.question}</h3>
           <div className="answers-container" >
-            <>
+
               {props.data.answers.map(answer => {
                 if (answer === props.data.correctAnswer)
                   {
@@ -46,10 +45,10 @@ function Results(props) {
                 )
               })
               }
-            </>
+
           </div>
         </motion.div>
-      </div>
+        </div>
 
 
     // What do I want:

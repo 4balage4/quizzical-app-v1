@@ -131,6 +131,7 @@ function App() {
   //  The standard value is false.
   // When the user click on the button, it sets the page to true. And the RESULTS.jsx component will be rendered.
   function changePage() {
+    window.scrollTo(0, 0)
     return setChange(prev =>!prev)
   }
 
@@ -143,6 +144,7 @@ function App() {
   function startGame() {
 
     if (!firstRender) {
+
       setLoadingInProgress(true)
       setRefresh(prev => !prev)
       setChange(false)
@@ -212,7 +214,7 @@ function App() {
       ) :
        (
         !firstRender &&
-         <div className="question-page-container">
+         <div className="main-container">
           {/* The change is set with the changePage function */}
           {change ? getResults : createdQuestions}
           <Button changePage={changePage} change={change} results={results} firstRender={firstRender} startGame={startGame}/>

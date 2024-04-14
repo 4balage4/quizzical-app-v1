@@ -3,7 +3,7 @@
 function MainScreen(props) {
   return (
     <>
-      <div className="main-container">
+      <div className="main-page-container">
         <h1>Quizzical</h1>
         <p>Answer to the questions</p>
         <div className="nickname">
