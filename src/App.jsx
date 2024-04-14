@@ -5,6 +5,9 @@ import MainScreen from "./components/MainScreen";
 import { nanoid } from 'nanoid'
 import Button from "./components/Button"
 import {decode} from 'html-entities';
+import  ScaleLoader from 'react-spinners/ScaleLoader';
+
+
 
 import './App.css'
 
@@ -14,92 +17,77 @@ function App() {
   const [questions, setQuestions] = useState([])
   // if the state changes will update the array. This is only changed,  on the first render and when the user clicks on the new game.
   // The questions are rendered when the page loads.
-  const [answer, setAnswer] = useState(true)
+  const [refresh, setRefresh] = useState(false)
 
   // evaluate the answers
   const [change, setChange] = useState(false)
   const [sessionToken, setSessionToken] = useState('')
 
+
+  const [loadingInProgress, setLoadingInProgress] = useState(true);
+
   // player name for the results.
   const [playerName, setPlayerName] = useState('')
 
   useEffect(() => {
-    if(!sessionToken) {
+
+      if(!sessionToken) {
       fetch("https://opentdb.com/api_token.php?command=request")
       .then(response => response.json())
       .then(data => setSessionToken(data.token))
     }
-    console.log('fetching dat...')
-    fetchData()
+    console.log('fetching data...')
 
-  }, [answer])
+       fetchData()
+  }, [refresh, sessionToken])
+
+
+  setTimeout(() => {
+    setLoadingInProgress(false);
+   }, 500)
 
 
 
-  const fetchData  = async () => {
-    // easy medium
-    const difficulty = "medium"
+// Fetching the data and setting up the array of question is here.
+  function fetchData() {
     setQuestions([])
 
-    const info = await fetch(`https://opentdb.com/api.php?amount=5&category=22&difficulty=${difficulty}&type=multiple&token=${sessionToken}`)
-      .then(response => response.json())
-      .then(data =>  {
-          data.results.map(questionData => {
-              let info = nanoid()
-              const correctedArray = questionData.incorrect_answers.map ((answer) => decode(answer))
-              const correctAnswer = decode(questionData.correct_answer)
-              const questionSet  =  {
-              name: info,
-              key: info,
-              question: decode(questionData.question),
-              correctAnswer: correctAnswer,
-              answers: shuffleArr([...correctedArray, correctAnswer]),
-              difficulty: questionData.difficulty,
-              category: questionData.category ? questionData.category : '',
-              type: questionData.type,
-              markedAnswer: "",
-              correct: false
-             }
-            return setQuestions(prev => [...prev, questionSet])
-          })
-       })
-       return info
+
+    // easy medium
+    const difficulty = "medium"
+    // setQuestions([])
+   fetch(`https://opentdb.com/api.php?amount=5&category=22&difficulty=${difficulty}&type=multiple&token=${sessionToken}`)
+        .then(response => response.json())
+        .then(data =>  {
+            data.results.map(questionData => {
+                let info = nanoid()
+                const correctedArray = questionData.incorrect_answers.map ((answer) => decode(answer))
+                const correctAnswer = decode(questionData.correct_answer)
+                const questionSet  =  {
+                name: info,
+                key: info,
+                question: decode(questionData.question),
+                correctAnswer: correctAnswer,
+                answers: shuffleArr([...correctedArray, correctAnswer]),
+                difficulty: questionData.difficulty,
+                category: questionData.category ? questionData.category : '',
+                type: questionData.type,
+                markedAnswer: "",
+                correct: false
+              }
+              return setQuestions(prev => [...prev, questionSet])
+            })
+        })
+
   }
 
   // Create a timer for the user. When he clicks the start game and when he clicks the see results
   // this will be saved as the result. The time, results, name.
 
 
-  //  function fetchData() {
-  //    fetch('https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple')
-  //     .then(response => response.json())
-  //     .then(data =>  {
-  //         data.results.map(questionData => {
-  //             let info = nanoid()
-  //             const correctedArray = questionData.incorrect_answers.map ((answer) => decode(answer))
-  //             const correctAnswer = decode(questionData.correct_answer)
-  //             const questionSet  =  {
-  //             name: info,
-  //             key: info,
-  //             question: decode(questionData.question),
-  //             correctAnswer: correctAnswer,
-  //             answers: shuffleArr([...correctedArray, correctAnswer]),
-  //             difficulty: questionData.difficulty,
-  //             category: questionData.category ? questionData.category : '',
-  //             type: questionData.type,
-  //             markedAnswer: "",
-  //             correct: false
-  //            }
-  //            setQuestions(prev => [...prev, questionSet])
-  //         })
-  //      })
-
-  // }
-
-
   // Fisher–Yates Shuffle
   // https://bost.ocks.org/mike/shuffle/
-
+  // This is for shuffling the array of the answers
   function shuffleArr(array) {
     let currentIndex = array.length;
 
@@ -113,6 +101,8 @@ function App() {
     return array;
   }
 
+
+  // Setting the question state when the user answers to the question.
   function handleChange(event) {
     // get the properties when clicked
     const {name, value} = event.target
@@ -137,18 +127,35 @@ function App() {
   }
 
 
+  // Changing the page state. This is a helper function to change the page. The event listener is on the QUESTIONS.jsx component.
+  //  The standard value is false.
+  // When the user click on the button, it sets the page to true. And the RESULTS.jsx component will be rendered.
   function changePage() {
     return setChange(prev =>!prev)
   }
 
+
+  // Start game is on the MAINSCREEN components button.
+  // The firstRender state is on true. And clicking to the button will set to TRUE, and the question component will be rendered.
+  // The same button is on the RESULTS.jsx component's button. At this moment, the firstRender state is on false. And the Change button will set to false
+  //  which means the main page will render.
+  // Whenever the refresh state changes, the api will run and get the questions.
   function startGame() {
+
     if (!firstRender) {
-      setQuestions([])
+      setLoadingInProgress(true)
+      setRefresh(prev => !prev)
       setChange(false)
-      setAnswer(prev => !prev)
     }
 
-    return setFirstRender(prev => !prev)
+    return (
+      setFirstRender(prev => !prev),
+      setLoadingInProgress(true),
+      setTimeout(() => {
+        setLoadingInProgress(false)
+      }, 500)
+    )
+
   }
 
   const getResults = questions.map(question => {
@@ -160,7 +167,7 @@ function App() {
 
   const createdQuestions = questions.map(question => {
     return (
-      <Question data={question} key={nanoid()} handleChange={handleChange}  />
+      <Question data={question} key={nanoid()} handleChange={handleChange} loadingInProgress={loadingInProgress} />
      )
   })
 
@@ -189,13 +196,30 @@ function App() {
 
   return (
     <>
-      {firstRender && <MainScreen startGame={startGame} playerName={playerName} handleChange={handlePlayerName}/>}
-      {!firstRender &&
+      {loadingInProgress ? (
+          <div className="loader-container">
+          <ScaleLoader color={'#E78895'} height={50}  width={6} speedMultiplier={0.75} />
+      </div>)
+        :
+        (firstRender && <MainScreen startGame={startGame} playerName={playerName} handleChange={handlePlayerName}/>)
+      }
+
+     {
+      !firstRender && loadingInProgress ? (
+        <div className="loader-container">
+          <ScaleLoader color={'#E78895'} height={50}  width={6} speedMultiplier={0.75} />
+      </div>
+      ) :
+       (
+        !firstRender &&
          <div className="question-page-container">
+          {/* The change is set with the changePage function */}
           {change ? getResults : createdQuestions}
           <Button changePage={changePage} change={change} results={results} firstRender={firstRender} startGame={startGame}/>
         </div>
-      }
+
+      )
+    }
     </>
 )
 }
