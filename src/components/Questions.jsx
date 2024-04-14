@@ -1,10 +1,10 @@
 import {nanoid} from 'nanoid'
+import { motion } from "framer-motion";
 
 function Question(props) {
 
   // props coming: data, key
   return (
-    <>
 
       <div className="question" >
               <h3>{props.data.question}</h3>
@@ -13,6 +13,7 @@ function Question(props) {
                 {props.data.answers.map(answer => {
                   let id = nanoid();
                   return (
+
                     <div className="answer" key={answer} >
                       <input
                         type='radio'
@@ -29,8 +30,7 @@ function Question(props) {
                 })}
               </div>
         </div>
-
-    </>
+       
 
   )
 }
